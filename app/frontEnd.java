@@ -1,8 +1,10 @@
 package app;
 
+import java.io.IOException;
 import java.util.Scanner;
 
-public class frontEnd {
+public class FrontEnd {
+    Service service = new Service();
     Scanner sc = new Scanner(System.in);
 
     public int userAccountNum;
@@ -12,10 +14,10 @@ public class frontEnd {
     private boolean loopMainMenu = true;
 
     public void mainMenu() {
-        System.out.println("=== Welcome to Morales Bank === \n\n");
+        System.out.println("=== Welcome to Morales Document Storage Services === \n\n");
 
         while (loopMainMenu) {
-            System.out.println("Please sign in with your account number to continue");
+            System.out.println("Please sign in with your account number to continue\n");
     
             try {
                 userAccountNum = sc.nextInt();
@@ -25,12 +27,8 @@ public class frontEnd {
             }
             
             if (validUser) {
-                loopMainMenu = false;
-                
-                System.out.println("Select an action:\n");
-                System.out.println("1) Deposit Document\n");
-                System.out.println("2) Withdraw Document\n");
-                System.out.println("3) Logout");
+                loopMainMenu = false;           
+                mainMenuOptions();
 
                 mainMenuSelection = sc.nextInt();
             } else {
@@ -47,7 +45,22 @@ public class frontEnd {
         }
     }
 
-    public void depositMenu() {
-        System.out.println("");
+    public void selectDocumentMenu() {
+        System.out.println("Please enter the date the document was stored:\n");
+        String date = String.valueOf(sc.nextInt());
+        
+        try {
+            service.searchDatabase(date);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("There was an error in fetching your document.");
+        }
+    }
+
+    private void mainMenuOptions() {
+        System.out.println("Select an action:\n");
+        System.out.println("1) Select A Document\n");
+        System.out.println("2) Show All Documents\n");
+        System.out.println("3) Logout");
     }
 }
