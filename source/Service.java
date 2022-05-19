@@ -1,25 +1,30 @@
 package source;
 
 import java.io.File;
+import java.io.FilePermission;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Service {
     // "C:/Users/kkmen/Documents/GitHub/USBank/database"
-    private static final String DATA_PATH = ""; // <-- this doesn't actually work, fix later
+    private static final String DATA_PATH = "C://Users//kkmen//Documents//GitHub//USBank//database"; // <-- this doesn't actually work, fix later
     Path folderPath = Paths.get(DATA_PATH);
+    File folder = folderPath.toFile();
+
+    SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 
     public ArrayList<File> searchDatabase(String date) throws IOException {
         ArrayList<File> selectedFiles = new ArrayList<>();
 
-        for (Path filePath : folderPath) {
-            File file = filePath.toFile();
-
-            String data = "";
-            data = new String(Files.readAllBytes(filePath));
+        for (File file : folder.listFiles()) {
+            Path filePath = file.toPath();
+            String data = Files.readString(filePath);
 
             if (data.contains(date)) {
                 selectedFiles.add(file);
@@ -29,22 +34,22 @@ public class Service {
         return selectedFiles;
     }
 
-    public ArrayList<File> filterDatabase(String date, String filterType) throws IOException {
+    public ArrayList<File> filterDatabase(String date, String filterType) throws IOException, ParseException {
         ArrayList<File> filteredFiles = new ArrayList<>();
 
-        for (Path filePath : folderPath) {
-            File file = filePath.toFile();
-
-            String data = new String(Files.readAllBytes(filePath));
-            String fileDate = data.split("Date: ").toString();
+        for (File file : folder.listFiles()) {
+            Path filePath = file.toPath();
+            String data[] = Files.readString(filePath).split("Date: ");
+            Date fileDate = sdf.parse(data.toString());
+            Date filterDate = sdf.parse(date);
             
             if (filterType.equalsIgnoreCase("before")) {
-                if (fileDate.compareTo(date) < 0) {
+                if (fileDate.before(filterDate)) {
                     filteredFiles.add(file);
                 }
 
             } else if (filterType.equalsIgnoreCase("after")) {
-                if (fileDate.compareTo(date) > 0) {
+                if (fileDate.after(filterDate)) {
                     filteredFiles.add(file);
                 }
             }
@@ -56,8 +61,7 @@ public class Service {
     public ArrayList<File> revealDatabase() {
         ArrayList<File> allFiles = new ArrayList<>();
 
-        for (Path filePath: folderPath) {
-            File file = filePath.toFile();
+        for (File file : folder.listFiles()) {
             allFiles.add(file);
         }
 
@@ -68,7 +72,7 @@ public class Service {
         int menuOption = 1;
 
         for (File document : documents) {
-            System.out.println(menuOption + ") " + document.getName());
+            System.out.println("\n" + menuOption + ") " + document.getName());
             menuOption++;
         }
     }

@@ -2,6 +2,7 @@ package source;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -15,7 +16,7 @@ public class FrontEnd {
     public static boolean validUser = true;
     
     public int mainMenuOptions() {
-        System.out.println("Select an action by entering the corresponding number:\n");
+        System.out.println("\nSelect an action by entering the corresponding number:\n");
         System.out.println("1) Select A Document\n");
         System.out.println("2) Show All Documents\n");
         System.out.println("3) Show All Documents before/after specified date\n");
@@ -28,7 +29,7 @@ public class FrontEnd {
     public boolean verifyUserMenu() {
         System.out.println("=== Welcome to Morales Document Storage Services === \n");
 
-        System.out.println("Please sign in with your user account number to continue\n");
+        System.out.println("Please sign in with your user account number to continue");
         userAccountNum = sc.nextInt();
 
         if (validUser) {
@@ -41,7 +42,7 @@ public class FrontEnd {
 
     public void selectDocumentMenu() throws IOException { 
         System.out.println("\nPlease enter the date the document was stored:\n");
-        String date = String.valueOf(sc.nextInt());
+        String date = sc.next();
         
         ArrayList<File> documents = service.searchDatabase(date);
 
@@ -59,12 +60,20 @@ public class FrontEnd {
 
     public void filterDocuments() throws IOException {
         System.out.println("\nWould you like to filter files before or after a certain date?");
-        String filterType = sc.nextLine();
+        String filterType = sc.next();
 
-        System.out.println("Please enter the date you would like to filter with:");
-        String date = String.valueOf(sc.nextInt());
+        System.out.println("\nPlease enter the date you would like to filter with:");
+        String date = sc.next();
 
-        ArrayList<File> documents = service.filterDatabase(date, filterType);
+        ArrayList<File> documents = null;
+
+        try {
+            documents = service.filterDatabase(date, filterType);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            System.out.println("\nThere was an error in parsing date.");
+
+        }
 
         service.printNamesOfDocuments(documents);
     }
