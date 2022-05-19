@@ -39,7 +39,7 @@ public class Service {
 
         for (File file : folder.listFiles()) {
             Path filePath = file.toPath();
-            String data[] = Files.readString(filePath).split("Date: ");
+            String data = Files.readString(filePath);
             Date fileDate = sdf.parse(data.toString());
             Date filterDate = sdf.parse(date);
             
@@ -75,5 +75,10 @@ public class Service {
             System.out.println("\n" + menuOption + ") " + document.getName());
             menuOption++;
         }
+    }
+
+    public boolean validateUser(int accountNumber) {
+        
+        return true;
     }
 }
