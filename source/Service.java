@@ -1,7 +1,6 @@
 package source;
 
 import java.io.File;
-import java.io.FilePermission;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -12,12 +11,13 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Service {
-    // "C:/Users/kkmen/Documents/GitHub/USBank/database"
-    private static final String DATA_PATH = "C://Users//kkmen//Documents//GitHub//USBank//database"; // <-- this doesn't actually work, fix later
+
+    private static final String DATA_PATH = "C://Users//kkmen//Documents//GitHub//USBank//database";
     Path folderPath = Paths.get(DATA_PATH);
-    File folder = folderPath.toFile();
+    File folder = folderPath.toFile();    
 
     SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+    public ArrayList<Integer> validAccounts = new ArrayList<>();
 
     public ArrayList<File> searchDatabase(String date) throws IOException {
         ArrayList<File> selectedFiles = new ArrayList<>();
@@ -78,7 +78,20 @@ public class Service {
     }
 
     public boolean validateUser(int accountNumber) {
-        
-        return true;
+        boolean valid = false;
+        for (int i = 0; i < validAccounts.size(); i++) {
+            if (accountNumber == validAccounts.get(i)) {
+                valid = true;
+            } else {
+                valid = false;
+            }
+        }
+
+        return valid;
+    }
+
+    public void initializeClientList() {
+        validAccounts.add(1); // 435-628-948-593
+        validAccounts.add(2); // 435-628-948-594
     }
 }

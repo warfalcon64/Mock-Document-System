@@ -10,11 +10,10 @@ public class FrontEnd {
     Service service = new Service();
     Scanner sc = new Scanner(System.in);
 
+
     public int userAccountNum;
     private int mainMenuSelection;
-    
-    public static boolean validUser = true;
-    
+        
     public int mainMenuOptions() {
         System.out.println("\nSelect an action by entering the corresponding number:\n");
         System.out.println("1) Select A Document\n");
@@ -32,7 +31,7 @@ public class FrontEnd {
         System.out.println("Please sign in with your user account number to continue");
         userAccountNum = sc.nextInt();
 
-        if (validUser) {
+        if (service.validateUser(userAccountNum)) {
             return true;
         } else {
             System.out.println("Incorrect account number.");

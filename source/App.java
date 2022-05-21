@@ -1,12 +1,18 @@
 package source;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class App {
+
     public static void main(String[] args) {
         FrontEnd frontEnd = new FrontEnd();
+        Service service = new Service();
+
         boolean exitProgram = false;
         int menuSelection = 6;
+
+        service.initializeClientList();
 
         if (frontEnd.verifyUserMenu()) {
             menuSelection = frontEnd.mainMenuOptions();
