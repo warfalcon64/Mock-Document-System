@@ -32,6 +32,7 @@ public class FrontEnd {
         userAccountNum = sc.nextInt();
 
         if (service.validateUser(userAccountNum)) {
+            System.out.println("Correct");
             return true;
         } else {
             System.out.println("Incorrect account number.");

@@ -17,7 +17,7 @@ public class Service {
     File folder = folderPath.toFile();    
 
     SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-    public ArrayList<Integer> validAccounts = new ArrayList<>();
+    public static ArrayList<Integer> validAccounts = new ArrayList<>();
 
     public ArrayList<File> searchDatabase(String date) throws IOException {
         ArrayList<File> selectedFiles = new ArrayList<>();
@@ -77,16 +77,15 @@ public class Service {
         }
     }
 
-    public boolean validateUser(int accountNumber) {
-        boolean valid = false;
-        for (int i = 0; i < validAccounts.size(); i++) {
-            if (accountNumber == validAccounts.get(i)) {
+    public Boolean validateUser(int accountNumber) {
+        Boolean valid = null;
+        for (Integer i: validAccounts) { // it isn't comparing correctly or something
+            if (accountNumber == i) {
                 valid = true;
             } else {
                 valid = false;
             }
         }
-
         return valid;
     }
 
