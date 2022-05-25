@@ -2,6 +2,8 @@ package source;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -19,14 +21,16 @@ public class Service {
     SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
     public static ArrayList<Integer> validAccounts = new ArrayList<>();
 
-    public ArrayList<File> searchDatabase(String date) throws IOException {
+    public ArrayList<File> searchDatabase(String date, int accountNumber) throws IOException {
         ArrayList<File> selectedFiles = new ArrayList<>();
 
         for (File file : folder.listFiles()) {
             Path filePath = file.toPath();
             String data = Files.readString(filePath);
+            String fileDate = data.split("\n")[0];
+            String fileAccountNum = data.split("\n")[1];
 
-            if (data.contains(date)) {
+            if (fileDate.contains(date) && fileAccountNum.equals(String.valueOf(accountNumber))) {
                 selectedFiles.add(file);
             }
         }
@@ -34,21 +38,23 @@ public class Service {
         return selectedFiles;
     }
 
-    public ArrayList<File> filterDatabase(String date, String filterType) throws IOException, ParseException {
+    public ArrayList<File> filterDatabase(String date, String filterType, int accountNumber) throws IOException, ParseException {
         ArrayList<File> filteredFiles = new ArrayList<>();
 
         for (File file : folder.listFiles()) {
             Path filePath = file.toPath();
             String data = Files.readString(filePath);
+            String fileAccountNum = data.split("\n")[1];
+
             Date fileDate = sdf.parse(data.toString());
             Date filterDate = sdf.parse(date);
             
-            if (filterType.equalsIgnoreCase("before")) {
+            if (filterType.equalsIgnoreCase("before") && fileAccountNum.equals(String.valueOf(accountNumber))) {
                 if (fileDate.before(filterDate)) {
                     filteredFiles.add(file);
                 }
 
-            } else if (filterType.equalsIgnoreCase("after")) {
+            } else if (filterType.equalsIgnoreCase("after") && fileAccountNum.equals(String.valueOf(accountNumber))) {
                 if (fileDate.after(filterDate)) {
                     filteredFiles.add(file);
                 }
@@ -58,14 +64,27 @@ public class Service {
         return filteredFiles;
     }
 
-    public ArrayList<File> revealDatabase() {
+    public ArrayList<File> revealDatabase(int accountNumber) throws IOException {
         ArrayList<File> allFiles = new ArrayList<>();
-
+        
         for (File file : folder.listFiles()) {
-            allFiles.add(file);
+            Path filePath = file.toPath();
+            String data = Files.readString(filePath);
+            String fileAccountNum = data.split("\n")[1];
+
+            if (fileAccountNum.equals(String.valueOf(accountNumber))) {
+                allFiles.add(file);
+
+            }
         }
 
         return allFiles;
+    }
+
+    public void downloadFile(File document) throws IOException {
+        File downloadedDocument = new File(document.getName());
+        InputStream in = document.toURI().toURL().openStream();
+        Files.copy(in, downloadedDocument.toPath());
     }
 
     public void printNamesOfDocuments(ArrayList<File> documents) {
@@ -77,13 +96,11 @@ public class Service {
         }
     }
 
-    public Boolean validateUser(int accountNumber) {
-        Boolean valid = null;
-        for (Integer i: validAccounts) { // it isn't comparing correctly or something
-            if (accountNumber == i) {
+    public boolean validateUser(int accountNumber) {
+        boolean valid = false;
+        for (int i = 0; i < validAccounts.size(); i++) { // it isn't comparing correctly or something
+            if (accountNumber == validAccounts.get(i)) {
                 valid = true;
-            } else {
-                valid = false;
             }
         }
         return valid;
@@ -91,6 +108,6 @@ public class Service {
 
     public void initializeClientList() {
         validAccounts.add(1); // 435-628-948-593
-        validAccounts.add(2); // 435-628-948-594
+        validAccounts.add(2); // 435-628-948-594    
     }
 }

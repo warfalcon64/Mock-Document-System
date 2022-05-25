@@ -32,7 +32,6 @@ public class FrontEnd {
         userAccountNum = sc.nextInt();
 
         if (service.validateUser(userAccountNum)) {
-            System.out.println("Correct");
             return true;
         } else {
             System.out.println("Incorrect account number.");
@@ -44,16 +43,17 @@ public class FrontEnd {
         System.out.println("\nPlease enter the date the document was stored:\n");
         String date = sc.next();
         
-        ArrayList<File> documents = service.searchDatabase(date);
+        ArrayList<File> documents = service.searchDatabase(date, userAccountNum);
 
         service.printNamesOfDocuments(documents);
+        service.downloadFile(documents.get(0));
     }
 
-    public void showAllDocumentsMenu() {
+    public void showAllDocumentsMenu() throws IOException {
         System.out.println("\nThese are all of your current documents:");
-        System.out.println("Enter the number corresponding to a document to select it\n");
+        // System.out.println("Enter the number corresponding to a document to select it\n");
 
-        ArrayList<File> documents = service.revealDatabase();
+        ArrayList<File> documents = service.revealDatabase(userAccountNum);
 
         service.printNamesOfDocuments(documents);
     }
@@ -68,7 +68,7 @@ public class FrontEnd {
         ArrayList<File> documents = null;
 
         try {
-            documents = service.filterDatabase(date, filterType);
+            documents = service.filterDatabase(date, filterType, userAccountNum);
         } catch (ParseException e) {
             e.printStackTrace();
             System.out.println("\nThere was an error in parsing date.");

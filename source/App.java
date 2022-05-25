@@ -1,7 +1,6 @@
 package source;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class App {
 
@@ -23,6 +22,7 @@ public class App {
             case 1:
                 try {
                     frontEnd.selectDocumentMenu();
+                    
                 } catch (IOException e) {
                     e.printStackTrace();
                     System.out.println("Files could not be found.");
@@ -31,7 +31,12 @@ public class App {
 
             // Show all documents
             case 2:
-                frontEnd.showAllDocumentsMenu();
+                try {
+                    frontEnd.showAllDocumentsMenu();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    System.out.println("Files could not be found.");
+                }
                 break;
 
             // Show all documents before/after specified date
@@ -40,7 +45,7 @@ public class App {
                     frontEnd.filterDocuments();
                 } catch (IOException e) {
                     e.printStackTrace();
-                    System.out.println("Files could not be found");
+                    System.out.println("Files could not be found.");
                 }
                 break;
 
