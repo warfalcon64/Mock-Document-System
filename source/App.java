@@ -22,7 +22,6 @@ public class App {
             case 1:
                 try {
                     frontEnd.selectDocumentMenu();
-                    
                 } catch (IOException e) {
                     e.printStackTrace();
                     System.out.println("Files could not be found.");

@@ -74,7 +74,6 @@ public class Service {
 
             if (fileAccountNum.equals(String.valueOf(accountNumber))) {
                 allFiles.add(file);
-
             }
         }
 
@@ -82,7 +81,8 @@ public class Service {
     }
 
     public void downloadFile(File document) throws IOException {
-        File downloadedDocument = new File(document.getName());
+        String path = "C:/Users/kkmen/Downloads/" + document.getName();
+        File downloadedDocument = new File(path);
         InputStream in = document.toURI().toURL().openStream();
         Files.copy(in, downloadedDocument.toPath());
     }

@@ -10,9 +10,7 @@ public class FrontEnd {
     Service service = new Service();
     Scanner sc = new Scanner(System.in);
 
-
     public int userAccountNum;
-    private int mainMenuSelection;
         
     public int mainMenuOptions() {
         System.out.println("\nSelect an action by entering the corresponding number:\n");
